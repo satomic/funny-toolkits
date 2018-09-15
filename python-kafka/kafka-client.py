@@ -17,7 +17,7 @@ parser.add_argument('brokers', type=str, help="broker list with ',' splited")
 parser.add_argument('role', type=str, help="only 'p' and 'c' are supported")
 parser.add_argument('--topic', type=str, default = "default_kafka_topic", help="kafka topic")
 parser.add_argument('--group', type=str, default = "default_kafka_group", help="kafka group")
-parser.add_argument('--msg', type=str, default = "default kafka msg", help="kafka topic")
+parser.add_argument('--msg', type=str, default = "default kafka msg", help="kafka msg")
 parser.add_argument('--test', type=str, default = "false", help="if --test if true, producer with produce msg every per second")
 args = parser.parse_args()
 

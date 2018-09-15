@@ -37,7 +37,7 @@ optional arguments:
   -h, --help     show this help message and exit
   --topic TOPIC  kafka topic
   --group GROUP  kafka group
-  --msg MSG      kafka topic
+  --msg MSG      kafka msg
   --test TEST    if --test if true, producer with produce msg every per second
 
 ```
