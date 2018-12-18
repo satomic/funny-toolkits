@@ -3,10 +3,10 @@ docker kill python-httpserver
 docker rm python-httpserver
 
 # build new one
-docker build -t satomic/python-httpserver .
+docker build -t python-httpserver .
 
 # push
-# docker push satomic/python-httpserver
+# docker push python-httpserver
 
 # run 
-docker run -it -p 8080:8080 --name python-httpserver satomic/python-httpserver
+docker run -it -p 8080:8080 --name python-httpserver python-httpserver
