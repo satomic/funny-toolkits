@@ -17,8 +17,10 @@ class ServiceFace(BaseService):
         #  "type": "local/url",
         #  "path": "path"
         # }
-        log = "%s %s" % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3],dictReq)
+        nowtime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+        log = "%s %s" % (nowtime, dictReq)
         print(log.replace("'",'"').replace('u"','"'))
+        return {nowtime: "success"}
 
 if __name__ == "__main__":
     print("webhook service started, please post info to http://<SERVER_IP>/webhook")
