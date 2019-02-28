@@ -4,7 +4,7 @@ you can access docker version here [python-webhook-k8s](https://hub.docker.com/r
 
 ## this a webhook service for you to contrl your k8s cluster by POST json content.
 
-- what you need to config is the `/usr/src/kubeconfig.yaml` file, you need to mount it with a `configmap`
+- what you need to config is the `/usr/src/kubeconfig/kubeconfig.yaml` file, you need to mount it with a `configmap`
 - and the default listening port is `8080`
 
 ### POST JSON format
