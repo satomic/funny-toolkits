@@ -14,7 +14,7 @@ you can access docker version here [python-webhook-k8s](https://hub.docker.com/r
 
 
 ### POST JSON format POST消息体格式
-<OPERATE TYPE> list, 可选的操作类型如下
+`<OPERATE TYPE>` list, 可选的操作类型如下
 ```["version", "create", "delete", "apply"]```
 ```
  {
