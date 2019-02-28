@@ -5,5 +5,6 @@ RUN chmod +x kubectl_amd64-linux
 RUN mv kubectl_amd64-linux kubectl
 COPY kubeconfig.yaml ./kubeconfig.yaml
 COPY MicroService ./MicroService
+COPY ShellCaller.py ./ShellCaller.py
 COPY ServiceWebhook.py ./ServiceWebhook.py
 CMD ["python","ServiceWebhook.py"]
