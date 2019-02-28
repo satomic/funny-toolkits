@@ -2,7 +2,6 @@
 
 import os
 import traceback
-import yaml
 import json
 import random
 import string
@@ -19,7 +18,10 @@ class ShellCaller(object):
         try:
             ret = os.system(shell_cmd)
         except Exception,e:
+            print("exception in run_shell")
+            return ret
             return traceback.format_exc(e)
+        print("everything is ok")
         return ret
 
     def run_kubectl(self, type, yaml_file):
@@ -30,7 +32,7 @@ class ShellCaller(object):
         '''
         if not ( os.path.exists(yaml_file) and os.path.isfile(yaml_file) ):
             return "%s does not exist or not a file" % yaml_file
-        cmd = "./kubectl --kubeconfig=kubeconfig.yaml %s %s" % (type, yaml_file)
+        cmd = "./kubectl --kubeconfig=kubeconfig.yaml %s -f %s" % (type, yaml_file)
         print("cmd: %s" % cmd)
         return self.run_shell(cmd)
 

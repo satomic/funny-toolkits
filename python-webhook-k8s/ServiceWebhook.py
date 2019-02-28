@@ -30,7 +30,7 @@ class ServiceFace(BaseService):
             return "paras illegal"
         if dictReq.get("type") not in self.sc.TYPE_LIST:
             return "type illegal"
-        return self.sc.run_kubectl_json(dictReq.get("type"), dictReq.get("json"))
+        return {"result": `self.sc.run_kubectl_json(dictReq.get("type"), dictReq.get("json"))`}
 
         return {nowtime: "success"}
 
