@@ -62,3 +62,11 @@ after that, you can POST a JSON like
     }
 }
 ```
+
+the response is
+```
+{
+    "result": "'deployment.extensions/nginx created'",
+    "ver": "v0.0.1"
+}
+```
