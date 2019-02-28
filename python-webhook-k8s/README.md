@@ -23,7 +23,7 @@ you can access docker version here [python-webhook-k8s](https://hub.docker.com/r
 ### demo JSON
 after that, you can POST a JSON like
 ```
- {
+{
     "type": "apply",
     "json": {
         "apiVersion": "extensions/v1beta1",
@@ -35,6 +35,11 @@ after that, you can POST a JSON like
         "spec": {
             "replicas": 1,
             "template": {
+            "metadata": {
+                "labels": {
+                    "workload.user.cattle.io/workloadselector": "deployment-default-nginx"
+                }
+            },
                 "spec": {
                     "containers": [
                         {
