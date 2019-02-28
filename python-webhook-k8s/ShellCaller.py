@@ -57,7 +57,9 @@ class ShellCaller(object):
         json_file = "yamls/%s.json" % ran_str
         with open(json_file,"w") as  f:
             json.dump(json_content, f)
-        return self.run_kubectl(type, json_file)
+        ret = self.run_kubectl(type, json_file)
+        print(ret)
+        return ret
 
 if __name__ == "__main__":
     sc = ShellCaller()
