@@ -43,6 +43,8 @@ class ShellCaller(object):
         if not ( os.path.exists(yaml_file) and os.path.isfile(yaml_file) ):
             return "%s does not exist or not a file" % yaml_file
         cmd = "./kubectl --kubeconfig=kubeconfig/kubeconfig.yaml %s -f %s" % (type, yaml_file)
+        if type == "version":
+            cmd = "./kubectl --kubeconfig=kubeconfig/kubeconfig.yaml version"
         print("cmd: %s" % cmd)
         return self.run_shell_v2(cmd)
 
