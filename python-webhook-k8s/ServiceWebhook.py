@@ -16,6 +16,7 @@ class ServiceFace(BaseService):
     def process(self, dictReq):
         # ret = "hello!", self.serviceCall("http://127.0.0.1:5001/test",dictReq) # call other microservice
         # dictReq = {
+        #  "token": "xxxxxx",
         #  "type": "create",
         #  "json": "<DETAILS>"
         # }
@@ -25,7 +26,11 @@ class ServiceFace(BaseService):
 
         # a = {}
 
-
+        if os.getenv('token') is not None:
+            if not dictReq.has_key("token"):
+                return "token is needed！"
+            if not os.getenv('token') == dictReq.get("token"):
+                return "token is illegal！"
         if not (dictReq.has_key("type") and dictReq.has_key("json")):
             return "paras illegal"
         if dictReq.get("type") not in self.sc.TYPE_LIST:

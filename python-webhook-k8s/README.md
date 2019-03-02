@@ -7,10 +7,12 @@ you can access docker version here [python-webhook-k8s](https://hub.docker.com/r
 ## this a webhook service for you to contrl your k8s cluster by POST json content. 
 - what you need to config is the `/usr/src/kubeconfig/kubeconfig.yaml` file, you need to mount it with a `configmap`
 - and the default listening port is `8080`
+- (Optional) add env `token`, you can define its value, but use the token value in kubeconfig.yaml file is suggested, if you config `token` env, the POST msg must contain this segment.
 
 ## 这是一个微服务应用容器，可以docker run，也可以部署在k8s中，向这个微服务POST json消息，就可以控制集群，返回值就是集群的响应值
 - 通过给它配置`/usr/src/kubeconfig/kubeconfig.yaml`文件，就可以连接你需要控制的集群
 - 默认监听端口为`8080`
+- (可选) 添加token环境变量，值可以自由定义，不过推荐用kubeconfig.yaml里面的token。如果配置了这个，那么POST消息体必须包含此字段
 
 
 ### POST JSON format POST消息体格式
@@ -18,6 +20,7 @@ you can access docker version here [python-webhook-k8s](https://hub.docker.com/r
 ```["version", "create", "delete", "apply"]```
 ```
  {
+    "token": "<TOKEN>", # optional
     "type": "<OPERATE TYPE>",
     "json": {
         <KUBECTL JSON CONTENT>
