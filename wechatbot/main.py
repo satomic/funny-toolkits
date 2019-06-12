@@ -1,11 +1,15 @@
 #coding=utf-8
 
 import os
+import sys
+sys.path.append("./")
 from sys import argv
 from wxpy import *
 import platform
-from wechatbot.common import *
-from wechatbot.ConfigLoader import Config
+from common import *
+# from wechatbot.common import *
+from ConfigLoader import Config
+# from wechatbot.ConfigLoader import Config
 
 print("===================\n作者: 铁板豆腐\n微信: hellogitty\n===================")
 
