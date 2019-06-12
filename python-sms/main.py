@@ -10,7 +10,7 @@ appid = 1400171296  # SDK AppID是1400开头
 appkey = "1aab6096ee5e71765b721db06f70d36b"
 
 # 需要发送短信的手机号码
-phone_numbers = ["15026630181"]
+phone_numbers = [""]
 
 # 短信模板ID，需要在短信应用中申请
 template_id = 7839  # NOTE: 这里的模板ID`7839`只是一个示例，真实的模板ID需要在短信控制台中申请
