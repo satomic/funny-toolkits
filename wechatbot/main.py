@@ -17,6 +17,7 @@ import time
 print("===================\n作者: 铁板豆腐\n微信: hellogitty\n===================")
 
 
+debug = True
 debug = False
 
 
@@ -99,12 +100,17 @@ def reply_all(msg):
 
     # 处理天气消息
     # 只特殊处理设定的自顶预报的分钟字段相同的
-    if current_time(fmt='%H:%M') == config.weather.time[0:5]:
+
+    if debug: printtext("config.weather.get('time')[0:5]:", config.weather.get("time")[0:5])
+    if debug: printtext("current_time(fmt='%H:%M')", currenttime(fmt='%H:%M'))
+    if currenttime(fmt='%H:%M') == config.weather.get("time")[0:5]:
         if "上海今天的天气是" in input:
             for group_name in config.groups.keys():
                 if config.groups.get(group_name).get("weather", 0) == 1:
                     group = bot.groups().search(group_name)[0]
                     group.send(input)
+
+    if debug: printtext("normal","msg")
 
     # 其他类型
     if debug:
