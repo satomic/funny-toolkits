@@ -11,10 +11,11 @@ class Config(object):
             self.json_obj = json.load(f)
 
         self.host_name = self.json_obj.get("host_name", None)
-        self.group_remark_name = self.json_obj.get("group_remark_name", None)
+        self.groups = self.json_obj.get("groups", None)
         self.master_id = self.json_obj.get("master_id", None)
         self.add_request = self.json_obj.get("add_request", None)
         self.reply = self.json_obj.get("reply", None)
+        self.weather = self.json_obj.get("weather", None)
 
 
 

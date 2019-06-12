@@ -22,3 +22,5 @@ def msg_content_clean(input, drain):
 
 if __name__ == "__main__":
     print(msg_content_clean("@河边小草 你是傻逼吗","@河边小草"))
+    test = {1:1,2:2}
+    print(test.keys())

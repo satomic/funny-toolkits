@@ -1,8 +1,14 @@
 {
     "host_name": "河边小草",
-    "group_remark_name": {
-        "上海有空青年(限单身)": "暖场狗狗",
-        "测试群": "我是测试"
+    "groups": {
+        "上海有空青年(限单身)": {
+            "group_remark_name": "暖场狗狗",
+            "weather": 1
+        },
+        "测试群": {
+            "group_remark_name": "我是测试",
+            "weather": 1
+        }
     },
     "master_id": ["主人1", "主人2"],
     "add_request":{
@@ -23,5 +29,8 @@
         "你好":"你也好",
         "hello":"hi!",
         "图":"C:/Users/yxfde/Desktop/3.png"
+    },
+    "weather": {
+        "time": "08:00:00"
     }
 }

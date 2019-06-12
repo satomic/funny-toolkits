@@ -3,6 +3,7 @@
 import os
 import sys
 sys.path.append("./")
+sys.path.append(".")
 from sys import argv
 from wxpy import *
 import platform
@@ -10,6 +11,8 @@ from common import *
 # from wechatbot.common import *
 from ConfigLoader import Config
 # from wechatbot.ConfigLoader import Config
+import threading
+import time
 
 print("===================\n作者: 铁板豆腐\n微信: hellogitty\n===================")
 
@@ -67,6 +70,24 @@ xiaobin.send("hello! 小冰")
 #     print(msg.sender.name)
 
 
+# 定时任务
+# =========================================
+class TimingJob(threading.Thread):
+    def __init__(self, threadID, name):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+
+    def run(self):
+        print("start：" + self.name)
+        while True:
+            if currenttime(fmt='%H:%M:%S') == config.weather.get("time"):
+                xiaobin.send("上海天气")
+            time.sleep(1)
+
+timing_job = TimingJob(1, "weather_job")
+timing_job.start()
+# timing_job.join()
 
 # 小冰的消息
 @bot.register(bot.mps().search('小冰'))
@@ -76,6 +97,14 @@ def reply_all(msg):
     input = msg.text
     printtext(msg.sender.name, input)
 
+    # 处理天气消息
+    if "上海今天的天气是" in input:
+        for group_name in config.groups.keys():
+            if config.groups.get(group_name).get("weather", 0) == 1:
+                group = bot.groups().search(group_name)[0]
+                group.send(input)
+
+    # 其他类型
     if debug:
         print(mq)
     if not mq:
@@ -127,13 +156,13 @@ def reply_all(msg):
     # 获取新消息并打印
     group_name = msg.sender.name
     if debug: printtext("group_name", group_name)
-    group_remark_name = config.group_remark_name.get(group_name)
+    group_remark_name = config.groups.get(group_name).get("group_remark_name")
     if debug: printtext("group_remark_name", group_remark_name)
 
     # 不是@的消息不回复
     if not msg.is_at:
         if msg.text == "群帮助":
-            msg.reply("暖群狗会的事情如下：\n1. 新人欢迎致辞\n2. 暖群")
+            msg.reply("暖群狗会的事情如下：\n1. 新人欢迎致辞\n2. 每日天气提醒\n3. 暖群")
         # if msg.text == "群统计":
         #     msg.reply(msg.sender.members.stats())
         if "加入了群聊" in msg.text:
