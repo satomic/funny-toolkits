@@ -1,32 +1,27 @@
 #coding=utf-8
 
+import os
+from sys import argv
 from wxpy import *
-import requests
-import datetime
 import platform
-from queue import Queue
+from wechatbot.common import *
+from wechatbot.ConfigLoader import Config
 
 print("===================\n作者: 铁板豆腐\n微信: hellogitty\n===================")
 
 
-# 一些函数
-# ======================================================
-def callapi(keyword):
-    res = requests.get('http://api.qingyunke.com/api.php?key=free&appid=0&msg=%s' % keyword)
-    res.encoding = 'utf-8'
-    ret = eval(res.text)
-    # if ret.get("result") == 0:
-    return ret.get("content").replace("{br}","\n")
-    # return "WHAT R U F**KING SAY"
+debug = False
 
-def currenttime(fmt='%Y-%m-%d %H:%M:%S'):
-    return datetime.datetime.now().strftime(fmt)
-
-def printtext(who, text):
-    print("[%s] %s: %s" % (currenttime(), who, text))
 
 # 变量初始化
 # ======================================================
+work_dir = os.path.dirname(argv[0])
+if debug:
+    printtext("work_dir", work_dir)
+
+# 加载配置
+config = Config(os.path.join(work_dir, "config.json"))
+
 qr_type = 2 # default for linux
 system_type = platform.system()
 if(system_type == "Windows"):
@@ -44,6 +39,22 @@ bot.enable_puid(path='wxpy_puid.pkl')
 xiaobin = bot.mps().search('小冰')[0]
 xiaobin.send("hello! 小冰")
 
+# 测试发@
+# ceshi = bot.groups().search('测试群')[0]
+# ceshi.send("@%s\u2005" % "铁板豆腐")
+# ceshi.send(u"@%s\u2005" % u"铁板豆腐")
+# ceshi.send(r"@%s\u2005" % r"铁板豆腐")
+# ceshi.send('@%s\u2005' % '铁板豆腐')
+# ceshi.send(r'@%s\u2005' % r'铁板豆腐')
+# ceshi.send(u'@%s\u2005' % u'铁板豆腐')
+# ceshi.send(u'@铁板豆腐\u2005')
+# ceshi.send(u'@铁板豆腐\u2006')
+# ceshi.send("@hellogitty")
+# ceshi.send('@hellogitty')
+# ceshi.send(u'@hellogitty')
+# ceshi.send('@' + '铁板豆腐' + '\u2005 ' )
+
+
 # 测试用所有消息
 # @bot.register()
 # def reply_all(msg):
@@ -51,7 +62,7 @@ xiaobin.send("hello! 小冰")
 #     print(msg.sender)
 #     print(msg.sender.name)
 
-debug = False
+
 
 # 小冰的消息
 @bot.register(bot.mps().search('小冰'))
@@ -96,11 +107,24 @@ def reply_all(msg):
 
     if debug:
         print("start------------")
+        print(bot.self)
+        print(bot.self.name)
+        print(bot.self.nick_name)
+        print(bot.self.user_name)
+        print(bot.self.remark_name)
         print(msg)
         print(msg.type)
         print(msg.sender)
         print(msg.sender.name)
+        if u'\u2005' in msg.text:
+            print("存在此字符！" + msg.text)
         print("stop------------")
+
+    # 获取新消息并打印
+    group_name = msg.sender.name
+    if debug: printtext("group_name", group_name)
+    group_remark_name = config.group_remark_name.get(group_name)
+    if debug: printtext("group_remark_name", group_remark_name)
 
     # 不是@的消息不回复
     if not msg.is_at:
@@ -110,9 +134,30 @@ def reply_all(msg):
         #     msg.reply(msg.sender.members.stats())
         if "加入了群聊" in msg.text:
             msg.reply("欢迎新人~撒花~❀~~❀")
+
+        if msg.text[0:4] == '@所有人':
+            counter = 0
+            r_msg = ""
+            for member in msg.sender.members:
+                if member.name == group_remark_name:
+                    continue
+                counter += 1
+                # r_msg += u'@%s\u2005' % member.name
+                r_msg += "@%s\u2005" % member.name
+                # r_msg += u'@%s ' % member.name
+                if counter == 50:
+                    msg.reply(u'%s%s' % (r_msg, msg.text[4:]))
+                    counter = 0
+                    r_msg = ''
+            # msg.reply(r_msg)
+            msg.reply(u'%s%s' % (r_msg, msg.text[4:]))
+            # if debug: printtext("bot.core", "start")
+            # if debug: printtext(msg.sender.name, r_msg)
+            # bot.core.send(r_msg, msg.sender.name)
+            # if debug: printtext("bot.core", "stop")
+
     else:
-        # 获取新消息并打印
-        input = msg.text[6:]
+        input = msg_content_clean(msg.text, "@%s" % group_remark_name)
         printtext(msg.sender.name, input)
         bot.mps().search('小冰')[0].send(input)
         mq.append({

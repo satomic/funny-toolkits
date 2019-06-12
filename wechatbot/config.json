@@ -1,0 +1,27 @@
+{
+    "host_name": "河边小草",
+    "group_remark_name": {
+        "上海有空青年(限单身)": "暖场狗狗",
+        "测试群": "我是测试"
+    },
+    "master_id": ["主人1", "主人2"],
+    "add_request":{
+        "auto_agree": 1,
+        "welcomes": [
+            {
+                "type":"text",
+                "content":"欢迎和我成为朋友"
+            },
+            {
+                "type":"image",
+                "content":"C:/Users/yxfde/Desktop/3.png"
+            }
+        ]
+    },
+    "reply":{
+        "帮助":"1. 简介\n2.菜单1\n",
+        "你好":"你也好",
+        "hello":"hi!",
+        "图":"C:/Users/yxfde/Desktop/3.png"
+    }
+}
