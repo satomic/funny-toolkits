@@ -98,11 +98,13 @@ def reply_all(msg):
     printtext(msg.sender.name, input)
 
     # 处理天气消息
-    if "上海今天的天气是" in input:
-        for group_name in config.groups.keys():
-            if config.groups.get(group_name).get("weather", 0) == 1:
-                group = bot.groups().search(group_name)[0]
-                group.send(input)
+    # 只特殊处理设定的自顶预报的分钟字段相同的
+    if current_time(fmt='%H:%M') == config.weather.time[0:5]:
+        if "上海今天的天气是" in input:
+            for group_name in config.groups.keys():
+                if config.groups.get(group_name).get("weather", 0) == 1:
+                    group = bot.groups().search(group_name)[0]
+                    group.send(input)
 
     # 其他类型
     if debug:
