@@ -1,1 +1,1 @@
-sudo docker run -itd --name wx -v pwd:/srv satomic/wxpy python main.py
+sudo docker run -itd --name wx -v $pwd:/srv satomic/wxpy python main.py
