@@ -1,6 +1,6 @@
 rmdir /s /q build
 rmdir /s /q dist
 
-pyinstaller -F --icon="icons/comm.ico" wechatbot.py -n WechatBot
+pyinstaller -F --icon="icons/comm.ico" main.py -n WechatBot
 
 pause

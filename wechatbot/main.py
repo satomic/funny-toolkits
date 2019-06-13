@@ -1,4 +1,4 @@
-#coding=utf-8
+# coding=utf-8
 
 import os
 import sys
@@ -162,10 +162,13 @@ def reply_all(msg):
         print("stop------------")
 
     # 获取新消息并打印
+    print(1)
     group_name = msg.sender.name
     if debug: printtext("group_name", group_name)
-    group_remark_name = config.groups.get(group_name).get("group_remark_name")
+    print(2)
+    group_remark_name = config.groups.get(group_name, {}).get("group_remark_name", config.host_name)
     if debug: printtext("group_remark_name", group_remark_name)
+    print(3)
 
     # 不是@的消息不回复
     if not msg.is_at:
