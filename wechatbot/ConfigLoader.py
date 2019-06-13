@@ -16,6 +16,7 @@ class Config(object):
         self.add_request = self.json_obj.get("add_request", None)
         self.reply = self.json_obj.get("reply", None)
         self.weather = self.json_obj.get("weather", None)
+        self.auto_reply = self.json_obj.get("auto_reply", None)
 
 
 
