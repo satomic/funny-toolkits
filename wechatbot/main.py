@@ -220,6 +220,14 @@ def reply_all(msg):
     if msg.type != TEXT:
         return
 
+    # 如果不是回复所有人
+    if config.get("auto_reply").get("to_all", 1) == 0:
+        # 需要进一步判断消息发送者是不是在好友列表
+        printtext(msg.sender.name, config.get("auto_reply").get("friends"))
+        if not msg.sender.name in config.get("auto_reply").get("friends"):
+            # 如果不在则return掉，否则正常执行下去
+            return
+
     # 获取新消息并打印
     input = msg.text
     printtext(msg.sender.name, input)

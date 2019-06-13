@@ -10,6 +10,10 @@
             "weather": 1
         }
     },
+    "auto_reply": {
+        "to_all": 0,
+        "friends": ["铁板豆腐", "测试"]
+    },
     "master_id": ["主人1", "主人2"],
     "add_request":{
         "auto_agree": 1,
