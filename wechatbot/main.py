@@ -108,7 +108,7 @@ def reply_all(msg):
             for group_name in config.groups.keys():
                 if config.groups.get(group_name).get("weather", 0) == 1:
                     group = bot.groups().search(group_name)[0]
-                    group.send(input)
+                    group.send("群里的小伙伴们，早上好呀~~ \n%s" % input)
 
     if debug: printtext("normal","msg")
 
