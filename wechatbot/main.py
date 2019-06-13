@@ -199,7 +199,10 @@ def reply_all(msg):
 
     else:
         input = msg_content_clean(msg.text, "@%s" % group_remark_name)
-        printtext(msg.sender.name, input)
+        # 如果内容为空
+        printtext(msg.sender.name, "%s | %s" % (input, len(input)))
+        if not input:
+            msg.reply("别光@人家呀，@人家后，后面跟上情话呀o(*////▽////*)q")
         bot.mps().search('小冰')[0].send(input)
         mq.append({
             "type": "group",
