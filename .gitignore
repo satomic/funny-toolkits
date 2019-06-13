@@ -101,6 +101,10 @@ ENV/
 # mypy
 .mypy_cache/
 logs/
+
+# wxpy
+*.pkl
+
 # IDE
 .idea/
 pkls/
