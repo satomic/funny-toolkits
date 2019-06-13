@@ -11,7 +11,7 @@
         }
     },
     "auto_reply": {
-        "to_all": 0,
+        "to_all": 1,
         "friends": ["铁板豆腐2", "测试"]
     },
     "master_id": ["主人1", "主人2"],
