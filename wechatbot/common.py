@@ -11,14 +11,31 @@ def callapi(keyword):
     return ret.get("content").replace("{br}","\n")
     # return "WHAT R U F**KING SAY"
 
-def currenttime(fmt='%Y-%m-%d %H:%M:%S'):
-    return datetime.datetime.now().strftime(fmt)
-
 def printtext(who, text):
-    print("[%s] %s: %s" % (currenttime(), who, text))
+    print("[%s] %s: %s" % (current_time(), who, text))
 
 def msg_content_clean(input, drain):
     return input.replace(drain, "").strip()
+
+def current_time(fmt='%Y-%m-%d %H:%M:%S.%f'):
+    return datetime.datetime.now().strftime(fmt)[:-3]
+
+
+def print_base(base_info, type):
+    print("%s [%s] %s" % (current_time(), type, base_info))
+
+
+def print_err(err, type="ERRO"):
+    print_base(err, type)
+
+
+def print_info(info, type="INFO"):
+    print_base(info, type)
+
+
+def print_warn(warn, type="WARN"):
+    print_base(warn, type)
+
 
 if __name__ == "__main__":
     print(msg_content_clean("@河边小草 你是傻逼吗","@河边小草"))

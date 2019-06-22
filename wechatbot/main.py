@@ -7,12 +7,13 @@ sys.path.append(".")
 from sys import argv
 from wxpy import *
 import platform
-from common import *
+import wechatbot.common as common
 # from wechatbot.common import *
-from ConfigLoader import Config
+from wechatbot.ConfigLoader import Config
 # from wechatbot.ConfigLoader import Config
 import threading
 import time
+from wechatbot.lianjia import TimingJobLianjia
 
 print("===================\n作者: 铁板豆腐\n微信: hellogitty\n===================")
 
@@ -25,7 +26,7 @@ debug = False
 # ======================================================
 work_dir = os.path.dirname(argv[0])
 if debug:
-    printtext("work_dir", work_dir)
+    common.printtext("work_dir", work_dir)
 
 # 加载配置
 config = Config(os.path.join(work_dir, "config.json"))
@@ -82,7 +83,7 @@ class TimingJob(threading.Thread):
     def run(self):
         print("start：" + self.name)
         while True:
-            if currenttime(fmt='%H:%M:%S') == config.weather.get("time"):
+            if common.current_time(fmt='%H:%M:%S') == config.weather.get("time"):
                 xiaobin.send("上海天气")
             time.sleep(1)
 
@@ -90,27 +91,31 @@ timing_job = TimingJob(1, "weather_job")
 timing_job.start()
 # timing_job.join()
 
+tofu = bot.friends().search('铁板豆腐')[0]
+timing_job_lianjia = TimingJobLianjia(1, "alerting for new house", tofu)
+timing_job_lianjia.start()
+
 # 小冰的消息
 @bot.register(bot.mps().search('小冰'))
 def reply_all(msg):
     # 获取接受到小冰消息那一瞬间的时间
-    current_time = currenttime(fmt='%Y-%m-%d %H:%M:%S.%f')
+    current_time = common.current_time(fmt='%Y-%m-%d %H:%M:%S.%f')
     input = msg.text
-    printtext(msg.sender.name, input)
+    common.printtext(msg.sender.name, input)
 
     # 处理天气消息
     # 只特殊处理设定的自顶预报的分钟字段相同的
 
-    if debug: printtext("config.weather.get('time')[0:5]:", config.weather.get("time")[0:5])
-    if debug: printtext("current_time(fmt='%H:%M')", currenttime(fmt='%H:%M'))
-    if currenttime(fmt='%H:%M') == config.weather.get("time")[0:5]:
+    if debug: common.printtext("config.weather.get('time')[0:5]:", config.weather.get("time")[0:5])
+    if debug: common.printtext("current_time(fmt='%H:%M')", current_time(fmt='%H:%M'))
+    if common.current_time(fmt='%H:%M') == config.weather.get("time")[0:5]:
         if "上海今天的天气是" in input:
             for group_name in config.groups.keys():
                 if config.groups.get(group_name).get("weather", 0) == 1:
                     group = bot.groups().search(group_name)[0]
                     group.send("群里的小伙伴们，早上好呀~~ \n%s" % input)
 
-    if debug: printtext("normal","msg")
+    if debug: common.printtext("normal","msg")
 
     # 其他类型
     if debug:
@@ -163,9 +168,9 @@ def reply_all(msg):
 
     # 获取新消息并打印
     group_name = msg.sender.name
-    if debug: printtext("group_name", group_name)
+    if debug: common.printtext("group_name", group_name)
     group_remark_name = config.groups.get(group_name, {}).get("group_remark_name", config.host_name)
-    if debug: printtext("group_remark_name", group_remark_name)
+    if debug: common.printtext("group_remark_name", group_remark_name)
 
     # 不是@的消息不回复
     if not msg.is_at:
@@ -198,16 +203,16 @@ def reply_all(msg):
             # if debug: printtext("bot.core", "stop")
 
     else:
-        input = msg_content_clean(msg.text, "@%s" % group_remark_name)
+        input = common.msg_content_clean(msg.text, "@%s" % group_remark_name)
         # 如果内容为空
-        printtext(msg.sender.name, "%s | %s" % (input, len(input)))
+        common.printtext(msg.sender.name, "%s | %s" % (input, len(input)))
         if not input:
             msg.reply("别光@人家呀，@人家后，后面跟上情话呀o(*////▽////*)q")
         bot.mps().search('小冰')[0].send(input)
         mq.append({
             "type": "group",
             "member": msg.member,
-            "time": currenttime(fmt='%Y-%m-%d %H:%M:%S.%f'),
+            "time": common.current_time(fmt='%Y-%m-%d %H:%M:%S.%f'),
             "group": msg.sender,
             "msg": input,
         })
@@ -223,18 +228,18 @@ def reply_all(msg):
     # 如果不是回复所有人
     if config.auto_reply.get("to_all", 1) == 0:
         # 需要进一步判断消息发送者是不是在好友列表
-        printtext(msg.sender.name, config.auto_reply.get("friends"))
+        common.printtext(msg.sender.name, config.auto_reply.get("friends"))
         if not msg.sender.name in config.auto_reply.get("friends"):
             # 如果不在则return掉，否则正常执行下去
             return
 
     # 获取新消息并打印
     input = msg.text
-    printtext(msg.sender.name, input)
+    common.printtext(msg.sender.name, input)
     bot.mps().search('小冰')[0].send(input)
     mq.append({
         "type": "friend",
-        "time": currenttime(fmt='%Y-%m-%d %H:%M:%S.%f'),
+        "time": common.current_time(fmt='%Y-%m-%d %H:%M:%S.%f'),
         "friend": msg.sender,
         "msg": input,
     })
