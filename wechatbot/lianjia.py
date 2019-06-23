@@ -1,5 +1,8 @@
 # coding=utf-8
 
+import sys
+sys.path.append("./")
+sys.path.append(".")
 import requests
 from bs4 import BeautifulSoup
 import threading
@@ -61,7 +64,8 @@ class DataLocal():
         self.housecodes = []
         common.print_info("load data local started")
         with open(self.data_path, "r", encoding="UTF-8") as f:
-            self.housecodes = f.readlines()
+            for line in f.readlines():
+                self.housecodes.append(line.strip())
         common.print_info("local data local successfully, %s" % self.housecodes)
 
     def has_code(self, code):
@@ -98,10 +102,10 @@ class TimingJobLianjia(threading.Thread):
             time.sleep(300)
 
 if __name__ == "__main__":
-    # datas = request_lianjia(hash="de2de1lc1lc2l2l3a2a3bp250ep340")
-    # print("len: %s" % len(datas))
-    # for data in datas:
-    #     print(data)
+    datas = request_lianjia(hash="de2de1lc1lc2l2l3a2a3bp250ep340")
+    print("len: %s" % len(datas))
+    for data in datas:
+        print(data)
 
-    timing_job = TimingJobLianjia(1, "alerting for new house")
-    timing_job.start()
+    # timing_job = TimingJobLianjia(1, "alerting for new house")
+    # timing_job.start()

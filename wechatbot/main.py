@@ -25,11 +25,11 @@ debug = False
 # 变量初始化
 # ======================================================
 work_dir = os.path.dirname(argv[0])
-if debug:
-    common.printtext("work_dir", work_dir)
+common.printtext("work_dir", work_dir)
 
 # 加载配置
 config = Config(os.path.join(work_dir, "config.json"))
+common.print_info("config.weather: %s" % config.weather)
 
 qr_type = 2 # default for linux
 system_type = platform.system()
