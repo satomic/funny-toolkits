@@ -6,22 +6,46 @@
 </head>
 <body>
     <center>
-        欢迎管理员：
-{% if name %}
-    工号: {{id}}  姓名: {{ name }}
+
+    {% if name %}
+        管理员 工号: {{ id }}  ，姓名: {{ name }}
 
         <h1>用户密码生成</h1>
 
-        <form method="post" action="login">
-            工号：<input type="text" name="id"/><br/>
-            姓名：<input type="text" name="name"/><br/>
-            <input type="submit" value="生成密码"/>
-        </form><br/>
+        {% for message in get_flashed_messages() %}
+            {{ message  }}
+        {% endfor %}
 
-        <h1>密码表</h1><br/>
-        <h1>已提交数据表</h1><br/>
+        <form method="post" action="admin">
+            <!--设置csrf_token-->
+            {{ form.csrf_token() }}
+
+            <p>
+                {{ form.id_new.label }} {{ form.id_new }}
+                {% for msg in form.id_new.errors %}
+                    {{ msg }}
+                {% endfor %}
+            </p>
+
+
+            <p>
+                {{ form.name_new.label }} {{ form.name_new }}
+                {% for msg in form.name_new.errors %}
+                    {{ msg }}
+                {% endfor %}
+            </p>
+
+            <p>
+                {{ form.submit() }}
+            </p>
+        </form>
+
+        <h1>已提交数据表历史记录</h1><br/>
+
+
+
 {% else %}
-        <h1>你需要登录！</h1>
+        <h1>你需要登录</h1>
 
 {% endif %}
     </center>

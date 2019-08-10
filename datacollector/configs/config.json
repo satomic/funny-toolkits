@@ -10,11 +10,16 @@
   },
   "users": {
     "a": {
-      "name": "a",
-      "key": "a"
+      "name": "a"
     },
     "b": {
 
     }
+  },
+  "data_format":{
+    "city": 10,
+    "project": 20,
+    "value": 10,
+    "time": 20
   }
 }
