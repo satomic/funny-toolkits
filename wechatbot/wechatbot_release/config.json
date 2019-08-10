@@ -1,0 +1,21 @@
+{
+    "host_name": "河边小草",
+    "groups": {
+        "上海有空青年(限单身)": {
+            "group_remark_name": "暖场狗狗",
+            "weather": 1
+        },
+        "测试群": {
+            "group_remark_name": "我是测试",
+            "weather": 1
+        }
+    },
+    "auto_reply": {
+        "to_all": 1,
+        "friends": ["铁板豆腐2", "测试"]
+    },
+    "weather": {
+        "time": "07:00:00"
+    }
+}
+

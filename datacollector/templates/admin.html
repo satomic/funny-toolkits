@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理页</title>
+</head>
+<body>
+    <center>
+        欢迎管理员：
+{% if name %}
+    工号: {{id}}  姓名: {{ name }}
+
+        <h1>用户密码生成</h1>
+
+        <form method="post" action="login">
+            工号：<input type="text" name="id"/><br/>
+            姓名：<input type="text" name="name"/><br/>
+            <input type="submit" value="生成密码"/>
+        </form><br/>
+
+        <h1>密码表</h1><br/>
+        <h1>已提交数据表</h1><br/>
+{% else %}
+        <h1>你需要登录！</h1>
+
+{% endif %}
+    </center>
+</body>
+</html>

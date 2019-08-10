@@ -37,6 +37,7 @@ class Config():
     def get_user_key(self, id, user_type="users"):
         info = self.get_user_info(id, user_type=user_type)
         if info:
+            # print(info)
             return info.get("key")
         return None
 
@@ -51,9 +52,11 @@ class Config():
     def get_admin_name(self, id):
         return self.get_user_name(id, user_type="admins")
 
-    def get_admin_key(self):
+    def get_admin_key(self, id):
         return self.get_user_key(id, user_type="admins")
 
+    def get_1st_admin_name(self):
+        return self.get_user_name(list(self.__get_admins_ids())[0], user_type="admins")
 
 if __name__ == "__main__":
     config = Config("configs/config.json")
@@ -66,5 +69,6 @@ if __name__ == "__main__":
     print(config.is_user("a"))
     print(config.is_user("b"))
     print(config.is_user("c"))
+    print(config.get_1st_admin_name())
 
     # print('satomic' in config.__get_admins_ids())

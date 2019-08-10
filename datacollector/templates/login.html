@@ -14,9 +14,9 @@
         {{ message  }}
     {% endfor %}
     <form method="post" action="login">
-        工号：<input type="text" name="id"/><br/>
-        姓名：<input type="text" name="name"/><br/>
-        秘钥：<input type="password" name="password"/><br/>
+        工号：<input type="text" name="id"  placeholder='id'/><br/>
+        姓名：<input type="text" name="name" placeholder='name'/><br/>
+        秘钥：<input type="password" name="key" placeholder='key'/><br/>
         <input type="submit" value="登陆"/>
     </form>
 {% endif %}

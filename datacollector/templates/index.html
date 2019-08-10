@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>from_test</title>
+</head>
+<body>
+    <center>
+        <h1>欢迎登陆在线数据系统</h1>
+
+        {% for message in get_flashed_messages() %}
+            {{ message  }}
+        {% endfor %}
+
+        <form method="post">
+            <!--设置csrf_token-->
+            {{ form.csrf_token() }}
+
+            <p>
+                {{ form.id.label }} {{ form.id }}
+                {% for msg in form.id.errors %}
+                    {{ msg }}
+                {% endfor %}
+            </p>
+
+
+            <p>
+                {{ form.name.label }} {{ form.name }}
+                {% for msg in form.name.errors %}
+                    {{ msg }}
+                {% endfor %}
+            </p>
+
+            <p>
+                {{ form.key.label }} {{ form.key }}
+            </p>
+            {% for msg in form.key.errors %}
+                <h6>{{ msg }}</h6>
+            {% endfor %}
+
+
+
+            <p>
+                {{ form.key1.label }} {{ form.key1 }}
+                {% for msg in form.key1.errors %}
+                    {{ msg }}
+                {% endfor %}
+            </p>
+
+            <p>
+                {{ form.submit() }}
+            </p>
+        </form>
+    </center>
+</body>
+</html>

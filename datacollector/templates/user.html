@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户页</title>
+</head>
+<body>
+    <center>
+        欢迎用户：
+{% if name %}
+    工号: {{id}}  姓名: {{ name }}
+{% else %}
+        <h1>你需要登录！</h1>
+{% endif %}
+    </center>
+</body>
+</html>

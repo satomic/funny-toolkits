@@ -1,8 +1,8 @@
 {
   "admins": {
     "satomic":{
-      "name": "satommic",
-      "key": "satommic"
+      "name": "satomic",
+      "key": "satomic"
     },
     "ab": {
 
@@ -10,7 +10,8 @@
   },
   "users": {
     "a": {
-
+      "name": "a",
+      "key": "a"
     },
     "b": {
 
