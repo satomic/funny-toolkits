@@ -1,0 +1,19 @@
+{
+  "admins": {
+    "satomic":{
+      "name": "satommic",
+      "key": "satommic"
+    },
+    "ab": {
+
+    }
+  },
+  "users": {
+    "a": {
+
+    },
+    "b": {
+
+    }
+  }
+}
