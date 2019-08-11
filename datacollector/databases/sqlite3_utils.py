@@ -12,7 +12,7 @@ class EasySqlite:
 
     def __init__(self, database):
         # 连接数据库
-        self._connection = sqlite3.connect(database)
+        self._connection = sqlite3.connect(database, check_same_thread = False)
 
     def _dict_factory(self, cursor, row):
         d = {}
@@ -76,6 +76,8 @@ class EasySqlite:
             return None
 
     def query(self, table, columns=["*"], conditions={}):
+        if isinstance(columns, str):
+            columns = [columns]
         column_segment = self.__gen_column_segment(columns)
         condition_segment = self.__gen_condition_segment(conditions)
         sql = "select %s from %s %s" % (column_segment, table, condition_segment)
@@ -107,6 +109,21 @@ class EasySqlite:
             values.update(conditions)
             self.insert(table, values=values)
 
+    def get_column_list_from_resp_dict_list(self, resp_dict_list, column):
+        ret = []
+        for resp_dict in resp_dict_list:
+            ret.append(resp_dict.get(column))
+        return ret
+
+
+    def get_all_table_names(self):
+        sql = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
+        common.print_info(sql)
+        resp = self.execute(sql)
+        return self.get_column_list_from_resp_dict_list(resp, "name")
+
+    def has_table(self, table_name):
+        return table_name in self.get_all_table_names()
 
 
 if __name__ == '__main__':

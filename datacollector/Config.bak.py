@@ -24,35 +24,48 @@ class Config():
         """
         :return: 返回所有普通用户的id列表  
         """
-        return self.db.get_user_ids()
+        return self.config.get(user_type).keys()
 
-    def is_user(self, id):
-        return self.db.has_user_id(id)
 
-    def get_user_name_by_id(self, id, user_type="users"):
-        return self.db.get_user_name_by_id(id)
+    def is_user(self, id, user_type="users"):
+        if id in self.__get_users_ids(user_type=user_type):
+            return True
+        return False
+
+    def get_user_info(self, id, user_type="users"):
+        if self.is_user(id, user_type=user_type):
+            return self.config.get(user_type).get(id)
+        return None
+
+    def get_user_name(self, id, user_type="users"):
+        info = self.get_user_info(id, user_type=user_type)
+        if info:
+            return info.get("name")
+        return None
+
+    def get_user_key(self, id, user_type="users"):
+        info = self.get_user_info(id, user_type=user_type)
+        if info:
+            # print(info)
+            return info.get("key")
+        return None
+
 
     # 管理员信息获取
     def __get_admins_ids(self):
         return self.__get_users_ids(user_type="admins")
 
     def is_admin(self, id):
-        return self.db.has_admin_id(id)
+        return self.is_user(id, user_type="admins")
 
-    def get_admin_name_by_id(self, id):
-        return self.db.get_admin_name_by_id(id)
+    def get_admin_name(self, id):
+        return self.get_user_name(id, user_type="admins")
 
-    def get_admin_key_by_id(self, id):
-        return self.db.get_admin_key_by_id(id)
+    def get_admin_key(self, id):
+        return self.get_user_key(id, user_type="admins")
 
     def get_1st_admin_name(self):
-        resp = self.db.get_admin_names()
-        if resp:
-            return resp[0]
-
-    def update_user(self, id, name, key):
-        self.db.update_user(id, name, key)
-
+        return self.get_user_name(list(self.__get_admins_ids())[0], user_type="admins")
 
 if __name__ == "__main__":
     config = Config("configs/config.json")

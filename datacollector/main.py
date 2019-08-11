@@ -6,12 +6,14 @@ from Config import Config
 import common.common as common
 import common.hash_utils as hash_utils
 
-config = Config("configs/config.json")
+
+
 
 app = Flask(__name__)
 app.secret_key = 'myprojectkey'
 
-
+db_file = "database.db3"
+config = Config("configs/config.json", db_file=db_file)
 
 @app.route('/', methods=['get', 'post'])
 def login():
@@ -34,12 +36,12 @@ def login():
 
         # 如果是管理员
         if config.is_admin(id):
-            if not name == config.get_admin_name(id):
+            if not name == config.get_admin_name_by_id(id):
                 common.print_err("admin name err with id: %s, %s is not %s" % (id, key, config.get_admin_name(id)))
                 flash("用户名错误")
                 return redirect(url_for("login"))
 
-            if not key == config.get_admin_key(id):
+            if not key == config.get_admin_key_by_id(id):
                 common.print_err("admin key err with id: %s, %s is not %s" % (id, key, config.get_admin_key(id)))
                 flash("秘钥错误")
                 return redirect(url_for("login"))
@@ -55,14 +57,15 @@ def login():
 
         # 如果是普通用户
         if config.is_user(id):
-            if not name == config.get_user_name(id):
-                common.print_warn("user name err with id: %s, %s is not %s" % (id, key, config.get_user_name(id)))
+            wanted_name = config.get_user_name_by_id(id)
+            if not name == config.get_user_name_by_id(id):
+                common.print_warn("user name err with id: %s, %s is not wanted value: %s" % (id, name, wanted_name))
                 flash("用户名错误")
                 return redirect(url_for("login"))
 
             key_realtime = hash_utils.hash(id, name)
             if not key == key_realtime:
-                common.print_warn("user key err with id: %s, %s is not %s" % (id, key, key_realtime))
+                common.print_warn("user key err with id: %s, %s is not wanted value: %s" % (id, key, key_realtime))
                 flash("秘钥错误")
                 return redirect(url_for("login"))
 
@@ -86,6 +89,9 @@ def admin():
         name_new = form_keygen.name_new.data
         key_new = hash_utils.hash(id_new, name_new)
         common.print_info("id: %s, name: %s, key: %s" % (id_new, name_new, key_new))
+
+        # 保存到数据库
+        config.update_user(id_new,name_new,key_new)
 
         # 获取cookie中的值，已登录用户
         id = request.cookies.get('id')
