@@ -12,7 +12,7 @@ import common.hash_utils as hash_utils
 app = Flask(__name__)
 app.secret_key = 'myprojectkey'
 
-db_file = "database.db3"
+db_file = "data/database.db3"
 config = Config("configs/config.json", db_file=db_file)
 
 @app.route('/', methods=['get', 'post'])

@@ -111,3 +111,5 @@ pkls/
 build/
 dist/
 yamls/
+
+.db3

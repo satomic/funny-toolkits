@@ -33,8 +33,9 @@ class DataSqlite(EasySqlite):
             self.table_admins: structure_user
         }
         try:
+            table_names = self.get_all_table_names()
             for table_name, structure in table_define.items():
-                if not self.has_table(table_name):
+                if not table_name in table_names:
                     self.execute("CREATE TABLE %s %s" % (table_name, structure))
         except Exception as e:
             common.print_warn(e)
@@ -58,13 +59,13 @@ class DataSqlite(EasySqlite):
         values.update(conditions)
         self.insert(table=self.table_history, values=values)
 
-    def update_user(self, id, name, key):
+    def update_user(self, id, name, key, table="users"):
         conditions = {"id": id}
         user = {"name": name}
         current_time = common.current_time()
         user["timestamp"] = current_time
         user["key"] = key
-        self.update(table=self.table_users, values=user, conditions=conditions)
+        self.update(table=table, values=user, conditions=conditions)
 
     def get_users(self, table="users"):
         return self.query(table=table)

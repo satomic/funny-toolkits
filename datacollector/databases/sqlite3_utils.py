@@ -105,7 +105,6 @@ class EasySqlite:
             common.print_info(sql)
             self.execute(sql)
         else:
-            # 否则就插入
             values.update(conditions)
             self.insert(table, values=values)
 

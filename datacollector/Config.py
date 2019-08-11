@@ -11,13 +11,17 @@ class Config():
     type_json = "json"
 
     def __init__(self, config_file, db_file):
-        self.config = json.load(open(config_file,"r"))
         self.db = DataSqlite(db_file)
-        self.db.create_table()
+        self.init()
         self.type = self.type_sqlite # sqlite/json
 
-    def get_config(self):
-        return self.config
+    def init(self):
+        self.db.create_table()
+        if not self.db.has_admin_id("satomic"):
+            self.db.update_user(id="satomic",
+                                name="satomic",
+                                key="satomic",
+                                table="admins")
 
     # 通用用户信息获取
     def __get_users_ids(self, user_type="users"):
