@@ -112,4 +112,4 @@ build/
 dist/
 yamls/
 
-.db3
+*.db3
