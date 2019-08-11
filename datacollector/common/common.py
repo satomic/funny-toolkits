@@ -37,8 +37,12 @@ def print_warn(warn, type="WARN"):
     print_base(warn, type)
 
 
+def gen_json_str(j, quot='"'):
+    return str(j).replace("'", '"')
+
 if __name__ == "__main__":
     print(msg_content_clean("@河边小草 你是傻逼吗","@河边小草"))
     test = {1:1,2:2}
     print(test.keys())
     print("07:00:00"[0:5])
+    print(gen_json_str({"haha":123}))

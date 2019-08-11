@@ -46,10 +46,10 @@ class EasySqlite:
         _cursor.close()
         return data
 
-    def gen_column_segment(self, columns=["*"]):
+    def __gen_column_segment(self, columns=["*"]):
         return ", ".join(columns)
 
-    def gen_condition_segment(self, conditions={}):
+    def __gen_condition_segment(self, conditions={}):
         if conditions and isinstance(conditions, dict):
             condition = []
             for key,value in conditions.items():
@@ -58,7 +58,7 @@ class EasySqlite:
             return "where %s" % sql
         return ""
 
-    def gen_values_segment(self, values, type="insert"):
+    def __gen_values_segment(self, values, type="insert"):
         if type == "insert":
             key_list = list(values.keys())
             value_list = []
@@ -76,8 +76,8 @@ class EasySqlite:
             return None
 
     def query(self, table, columns=["*"], conditions={}):
-        column_segment = self.gen_column_segment(columns)
-        condition_segment = self.gen_condition_segment(conditions)
+        column_segment = self.__gen_column_segment(columns)
+        condition_segment = self.__gen_condition_segment(conditions)
         sql = "select %s from %s %s" % (column_segment, table, condition_segment)
         common.print_info(sql)
         return self.execute(sql)
@@ -88,7 +88,7 @@ class EasySqlite:
         :return: 
         """
         if values and isinstance(values, dict):
-            values_segment = self.gen_values_segment(values)
+            values_segment = self.__gen_values_segment(values)
             sql = "insert into %s %s" % (table, values_segment)
             common.print_info(sql)
             self.execute(sql)
@@ -97,8 +97,8 @@ class EasySqlite:
         # 先按照条件查询，看是否有数据
         if self.query(table, conditions=conditions):
             # 如果有数据，就更新
-            value_segment = self.gen_values_segment(values, type="update")
-            condition_segment = self.gen_condition_segment(conditions)
+            value_segment = self.__gen_values_segment(values, type="update")
+            condition_segment = self.__gen_condition_segment(conditions)
             sql = """update %s set %s %s""" % (table, value_segment, condition_segment)
             common.print_info(sql)
             self.execute(sql)
