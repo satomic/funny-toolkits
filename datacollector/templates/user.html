@@ -7,7 +7,11 @@
 <body>
     <center>
         {% if name %}
-        工号: {{id}}  姓名: {{ name }}
+        工号: {{id}}  姓名: {{ name }}<br/>
+
+        {% for message in get_flashed_messages() %}
+            {{ message  }}<br/>
+    `   {% endfor %}
 
         <form method="post" action="user">
             <!--设置csrf_token-->
@@ -41,6 +45,11 @@
             </p>
         </form>
 
+
+        <form action = "user" method = "POST" enctype = "multipart/form-data">
+            <input type = "file" name = "file">
+            <input type = "submit"/>
+        </form>
 
         <h1>已提交数据表历史记录</h1><br/>
         {% else %}

@@ -1,6 +1,8 @@
 # coding=utf-8
 
+import os
 from flask import Flask, render_template, request, session, redirect, url_for, flash, make_response
+from werkzeug.utils import secure_filename
 from wtf import Login,KeyGen,UpdateData
 from Config import Config
 import common.common as common
@@ -8,9 +10,11 @@ import common.hash_utils as hash_utils
 
 
 
-
+UPLOAD_FOLDER = 'uploads'
 app = Flask(__name__)
 app.secret_key = 'myprojectkey'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 db_file = "data/database.db3"
 config = Config("configs/config.json", db_file=db_file)
@@ -103,19 +107,37 @@ def admin():
 
 @app.route('/user', methods=['get', 'post'])
 def user():
+
+    # 获取cookie中的值，已登录用户
+    id = request.cookies.get('id')
+    name = request.cookies.get('name')
+
     form_update_data = UpdateData()
     if form_update_data.validate_on_submit():
+        common.print_info("提交表单数据")
         city = form_update_data.city.data
         project = form_update_data.project.data
         value = form_update_data.value.data
         common.print_info("city: %s, project: %s, value: %s" % (city, project, value))
 
-        # 获取cookie中的值，已登录用户
-        id = request.cookies.get('id')
-        name = request.cookies.get('name')
+        conditions = {
+            "city": city,
+            "project": project
+        }
+        config.update_datas(id, name, conditions, value)
+
         common.print_info("get id:%s, name:%s from cookies" % (id, name))
-        return render_template('user.html', id=id, name=name, form=form_update_data)
-    return render_template('user.html', form=form_update_data)
+        # return render_template('user.html', id=id, name=name, form=form_update_data)
+
+    if request.method == 'POST':
+        file = request.files['file']
+        filename = file.filename
+        common.print_info("上传文件: %s" % filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(filename)))
+        flash("file %s uploaded successfully" % filename)
+
+    # return render_template('user.html', form=form_update_data)
+    return render_template('user.html', id=id, name=name, form=form_update_data)
 
 
 if __name__ == '__main__':

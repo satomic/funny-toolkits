@@ -111,5 +111,7 @@ pkls/
 build/
 dist/
 yamls/
+uploads/
+data/
 
 *.db3

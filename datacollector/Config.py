@@ -57,6 +57,9 @@ class Config():
     def update_user(self, id, name, key):
         self.db.update_user(id, name, key)
 
+    def update_datas(self, id, name, conditions, value, condition_extension={}, value_extension={}):
+        self.db.update_datas(id, name, conditions, value, condition_extension, value_extension)
+
 
 if __name__ == "__main__":
     config = Config("configs/config.json")
