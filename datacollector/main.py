@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, session, redirect, url_for, f
 from werkzeug.utils import secure_filename
 from wtf import Login,KeyGen,UpdateData
 from Config import Config
-import common.common as common
+import common.log_utils as common
 import common.hash_utils as hash_utils
 
 
