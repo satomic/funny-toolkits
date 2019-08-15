@@ -75,6 +75,8 @@ class Sheet(object):
             else:
                 raise Exception("excel file: %s is not exists" % excel)
         self.sheet = excel.get_sheet(sheet_name)
+        self.row_index_range = range(self.get_row_number())
+        self.col_index_range = range(self.get_col_number())
 
     def row_values(self, index):
         return self.sheet.row_values(index)
@@ -107,6 +109,11 @@ class Sheet(object):
             raise Exception("value: %s does not in the key col" % value)
         # return col_values.index(value) + cursor
         return find_all_index(col_values, value, cursor)
+
+    def get_row_dict_with_header(self, index_row, index_header=1, cursor=1):
+        header = self.row_values(index_header-cursor)
+        row_values = self.row_values(index_row-cursor)
+        return dict(zip(header, row_values))
 
 class Updater(object):
 
@@ -156,5 +163,5 @@ if __name__ == "__main__":
 
     # load original data
     original_sheet = Sheet(original_excel, "原始")
-    print(original_sheet.get_row_number())
+    print(original_sheet.get_row_dict_with_header(3))
 

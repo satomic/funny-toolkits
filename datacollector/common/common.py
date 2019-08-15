@@ -2,6 +2,7 @@
 
 import requests
 import datetime
+import json
 
 def callapi(keyword):
     res = requests.get('http://api.qingyunke.com/api.php?key=free&appid=0&msg=%s' % keyword)
@@ -36,9 +37,11 @@ def print_info(info, type="INFO"):
 def print_warn(warn, type="WARN"):
     print_base(warn, type)
 
-
 def gen_json_str(j, quot='"'):
     return str(j).replace("'", '"')
+
+def get_json_formated(j):
+    return json.dumps(j, indent=2)
 
 if __name__ == "__main__":
     print(msg_content_clean("@河边小草 你是傻逼吗","@河边小草"))
