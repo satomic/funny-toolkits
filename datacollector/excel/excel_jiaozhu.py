@@ -92,14 +92,29 @@ class OneData():
         return list(zone_list[self.get_city_row_indexs()])
 
     def get_city_datas(self):
+        """
+        :return: 只要err的返回不为空，那么就要求修改数据直到通过为止
+        """
         city_datas = {}
+        err_city_datas = []
         for index in self.get_city_row_indexs():
             row_dict = self.sheet.get_row_dict_with_header(index, index_header=self.sheet_structure.row_index_header,cursor=0)
-            print(row_dict)
             city = row_dict.pop(self.sheet_structure.zone)
-            city_datas[city] = row_dict
-        return city_datas
+            bad_city_data = self.check_city_validity(row_dict)
+            if bad_city_data:
+                err_city_datas.append({city: bad_city_data})
+            else:
+                city_datas[city] = row_dict
+        return city_datas, err_city_datas
 
+    def check_city_validity(self, city_info):
+        # todo 每个字段的有效性检查
+        # todo 当前月份数据基于之前数据的验证
+        """
+        :param city_info: 城市信息字典 
+        :return: 异常城市为key的包含异常字段的字典list
+        """
+        return []
 
 
 
@@ -110,10 +125,10 @@ class OneData():
 
 if __name__ == "__main__":
     excel = r"D:\workspace\funny-toolkits\datacollector\samples\data_sample_1.xlsx"
-    one_data = OneData(excel, 0)
+    one_data = OneData(excel, "项目1")
     # print(one_data.get_city_datas())
-    citys = one_data.get_city_datas()
+    citys,errs = one_data.get_city_datas()
     for city,info in citys.items():
         print(city, info)
-
+    print(errs)
 
