@@ -68,10 +68,12 @@ def copy_file(file_old, file_new_prefix):
 class Sheet(object):
 
     def __init__(self, excel, sheet_name):
+        self.sheet_names = ""
         excel = excel.replace("\\","/")
         if isinstance(excel, str):
             if os.path.exists(excel):
                 excel = Excel(excel)
+                self.sheet_names = excel.sheet_names
             else:
                 raise Exception("excel file: %s is not exists" % excel)
         self.sheet = excel.get_sheet(sheet_name)

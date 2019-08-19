@@ -79,6 +79,7 @@ class OneData():
                                               col_index_ago=col_index_ago,
                                               col_index_now=col_index_now)
         self.sheet = Sheet(xlsx_file, self.sheet_structure.sheet_name)
+        self.sheet_names = self.sheet.sheet_names
 
     def get_city_row_indexs(self):
         # print(self.sheet_structure.row_index_header)
@@ -116,19 +117,17 @@ class OneData():
         """
         return []
 
-
-
-
-
-
+    def get_now_date(self):
+        titles = self.sheet.row_values(0)
+        return titles[self.sheet_structure.col_index_now]
 
 
 if __name__ == "__main__":
-    excel = r"D:\workspace\funny-toolkits\datacollector\samples\data_sample_1.xlsx"
+    excel = r"D:\workspace\funny-toolkits\datacollector\samples\simudata\data_sample_1.xlsx"
     one_data = OneData(excel, "项目1")
     # print(one_data.get_city_datas())
     citys,errs = one_data.get_city_datas()
     for city,info in citys.items():
         print(city, info)
     print(errs)
-
+    print(one_data.get_now_date())
