@@ -17,6 +17,7 @@ class City(object):
 class Result(object):
 
     def __init__(self):
+        self.project_names = []
         self.citys = {}
         self.battle_zones = {}
         self.total = {}
@@ -62,6 +63,7 @@ for excel in excels:
 
     # 获取项目名称
     project_name = one_data.sheet_names[0]
+    result.project_names.append(project_name)
 
     # 获取详细信息，并遍历
     citys, errs = one_data.get_city_datas()
@@ -97,7 +99,7 @@ for city,info in result.citys.items():
 
     battle_zone = info.get(battle_zone_str)
 
-    # 初始化城市数据
+    # 初始化战区数据
     if battle_zone not in result.battle_zones.keys():
         result.battle_zones[battle_zone] = {
             subsidy_str: 0,
@@ -147,13 +149,21 @@ if True:
 
 
 csv_contents = []
-csv_contents.append("范围,战区,力度,补贴,GMV")
+csv_contents.append("范围,战区,力度,补贴,GMV,%s" % ",".join(result.project_names))
+
+
 info = result.total
 csv_contents.append("%s,%s,%s,%s,%s" % ("全国", "", info.get(needed_date), info.get(subsidy_str), info.get(gmv_str)))
 for battle_zone, info in result.battle_zones.items():
-    csv_contents.append("%s,%s,%s,%s,%s" % (battle_zone, "", info.get(needed_date), info.get(subsidy_str), info.get(gmv_str)))
+    line = "%s,%s,%s,%s,%s" % (battle_zone, "", info.get(needed_date), info.get(subsidy_str), info.get(gmv_str))
+    csv_contents.append(line)
 for city, info in result.citys.items():
-    csv_contents.append("%s,%s,%s,%s,%s" % (city, info.get(battle_zone_str), info.get(needed_date), info.get(subsidy_str), info.get(gmv_str)))
+    line = "%s,%s,%s,%s,%s" % (city, info.get(battle_zone_str), info.get(needed_date), info.get(subsidy_str), info.get(gmv_str))
+    values = []
+    for project_name in result.project_names:
+        values.append("%s" % info.get("projects").get(project_name))
+    line = "%s,%s" % (line, ",".join(values))
+    csv_contents.append(line)
 
 csv_contents = "\n".join(csv_contents)
 with open("result_%s.csv" % common.current_time(fmt='%Y%m%d_%H%M%S%f'), "w") as f:

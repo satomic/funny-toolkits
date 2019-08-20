@@ -80,11 +80,24 @@ class OneData():
                                               col_index_now=col_index_now)
         self.sheet = Sheet(xlsx_file, self.sheet_structure.sheet_name)
         self.sheet_names = self.sheet.sheet_names
+        self.project_name = self.sheet_names[0]
+        self.total_zone_indexs = self.get_total_zone_indexs()
+
+    def get_total_zone_indexs(self):
+        col_1st_values = self.sheet.col_values(0)
+        i = 0
+        ret = []
+        for value in col_1st_values:
+            if ("全国" in value) or ("战区" in value):
+                ret.append(i)
+            i += 1
+        return ret
 
     def get_city_row_indexs(self):
         # print(self.sheet_structure.row_index_header)
         # print(self.sheet_structure.col_index_battle_zone)
-        index_others = [self.sheet_structure.row_index_header] + self.sheet_structure.row_index_battle_zone
+        # index_others = [self.sheet_structure.row_index_header] + self.sheet_structure.row_index_battle_zone
+        index_others = [self.sheet_structure.row_index_header] + self.total_zone_indexs
         # print(index_others)
         return list(filter(lambda i: i not in index_others, self.sheet.row_index_range))
 
@@ -125,9 +138,10 @@ class OneData():
 if __name__ == "__main__":
     excel = r"D:\workspace\funny-toolkits\datacollector\samples\simudata\data_sample_1.xlsx"
     one_data = OneData(excel, "项目1")
+    print(one_data.get_city_row_indexs())
     # print(one_data.get_city_datas())
     citys,errs = one_data.get_city_datas()
-    for city,info in citys.items():
-        print(city, info)
-    print(errs)
-    print(one_data.get_now_date())
+    # for city,info in citys.items():
+    #     print(city, info)
+    # print(errs)
+    # print(one_data.get_now_date())
