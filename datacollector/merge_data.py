@@ -225,5 +225,14 @@ if __name__ == "__main__":
         csv_contents.append(line)
 
     csv_contents = "\n".join(csv_contents)
-    with open(os.path.join(excel_path, "result_%s.csv" % common.current_time(fmt='%Y%m%d_%H%M%S%f')), "w") as f:
+    csv_path = os.path.join(excel_path, "result_%s.csv" % common.current_time(fmt='%Y%m%d_%H%M%S%f'))
+    with open(csv_path, "w") as f:
         f.write(csv_contents)
+
+    print("")
+    print("")
+    print("==============================================")
+    print("")
+    print("报表输出到：\n%s" % os.path.abspath(csv_path))
+    print("")
+    print("==============================================")
