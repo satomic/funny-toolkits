@@ -18,6 +18,7 @@ class Result(object):
 
     def __init__(self):
         self.project_names = []
+        self.projects = {}
         self.citys = {}
         self.battle_zones = {}
         self.total = {}
@@ -65,6 +66,12 @@ for excel in excels:
     project_name = one_data.sheet_names[0]
     result.project_names.append(project_name)
 
+    # 以项目为维度统计
+    result.projects[project_name] = {
+        battle_zone_str: {},
+        "total": 0
+    }
+
     # 获取详细信息，并遍历
     citys, errs = one_data.get_city_datas()
     for err in errs:
@@ -73,19 +80,35 @@ for excel in excels:
 
         # 以城市为维度进行数据统计
         # 如果城市是第一次出现
+        battle_zone = info.get("归属战区")
         if city not in result.citys.keys():
             # 初始化城市数据
+            gmv = info.get(gmv_str)
             result.citys[city] = {
-                gmv_str: info.get(gmv_str),
-                battle_zone_str: info.get("归属战区"),
+                gmv_str: gmv,
+                battle_zone_str: battle_zone,
                 needed_date: 0,
                 "projects": {}
             }
 
         # 额外存储以项目维度的数据方便未来扩展
         power_now = info.get(needed_date)
-        result.citys[city]["projects"][project_name] = power_now
+        subsidy_now = power_now * info.get(gmv_str)
+        result.citys[city]["projects"][project_name] = {
+            "power": power_now,
+            "subsidy": subsidy_now
+        }
         result.citys[city][needed_date] += power_now
+
+        # 针对当前项目统计
+        if battle_zone not in result.projects[project_name][battle_zone_str].keys():
+            result.projects[project_name][battle_zone_str][battle_zone] = 0
+
+        # 统计战区维度
+        result.projects[project_name][battle_zone_str][battle_zone] += subsidy_now
+
+        # 统计全国维度
+        result.projects[project_name]["total"] += subsidy_now
 
 # 计算战区
 # 补贴金额，逐个城市计算
@@ -149,19 +172,35 @@ if True:
 
 
 csv_contents = []
-csv_contents.append("范围,战区,力度,补贴,GMV,%s" % ",".join(result.project_names))
+
+# projects_power_subsidy_str = ""
+tmp = []
+for project_name in result.project_names:
+    tmp.append("{0}力度,{0}补贴".format(project_name))
+csv_contents.append("范围,战区,力度,补贴,GMV,%s" % ",".join(tmp))
 
 
+tmp = []
+for project_name in result.project_names:
+    subsidy = result.projects.get(project_name).get("total")
+    tmp.append(",{0}".format(subsidy))
 info = result.total
-csv_contents.append("%s,%s,%s,%s,%s" % ("全国", "", info.get(needed_date), info.get(subsidy_str), info.get(gmv_str)))
+csv_contents.append("%s,%s,%s,%s,%s,%s" % ("全国", "", info.get(needed_date), info.get(subsidy_str), info.get(gmv_str),",".join(tmp)))
+
 for battle_zone, info in result.battle_zones.items():
-    line = "%s,%s,%s,%s,%s" % (battle_zone, "", info.get(needed_date), info.get(subsidy_str), info.get(gmv_str))
+    tmp = []
+    for project_name in result.project_names:
+        subsidy = result.projects.get(project_name).get(battle_zone_str).get(battle_zone)
+        tmp.append(",{0}".format(subsidy))
+    line = "%s,%s,%s,%s,%s,%s" % (battle_zone, "", info.get(needed_date), info.get(subsidy_str), info.get(gmv_str),",".join(tmp))
     csv_contents.append(line)
+
 for city, info in result.citys.items():
     line = "%s,%s,%s,%s,%s" % (city, info.get(battle_zone_str), info.get(needed_date), info.get(subsidy_str), info.get(gmv_str))
     values = []
     for project_name in result.project_names:
-        values.append("%s" % info.get("projects").get(project_name))
+        project_value = info.get("projects").get(project_name)
+        values.append("%s,%s" % (project_value.get("power"),project_value.get("subsidy")))
     line = "%s,%s" % (line, ",".join(values))
     csv_contents.append(line)
 
