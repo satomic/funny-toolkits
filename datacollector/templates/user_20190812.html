@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户页</title>
+</head>
+<body>
+    <center>
+        {% if name %}
+        工号: {{id}}  姓名: {{ name }}<br/>
+
+        {% for message in get_flashed_messages() %}
+            {{ message  }}<br/>
+    `   {% endfor %}
+
+        <form method="post" action="user">
+            <!--设置csrf_token-->
+            {{ form.csrf_token() }}
+
+            <p>
+                {{ form.city.label }} {{ form.city }}
+                {% for msg in form.city.errors %}
+                    {{ msg }}
+                {% endfor %}
+            </p>
+
+
+            <p>
+                {{ form.project.label }} {{ form.project }}
+                {% for msg in form.project.errors %}
+                    {{ msg }}
+                {% endfor %}
+            </p>
+
+            <p>
+                {{ form.value.label }} {{ form.value }}
+                {% for msg in form.value.errors %}
+                    {{ msg }}
+                {% endfor %}
+            </p>
+
+
+            <p>
+                {{ form.submit() }}
+            </p>
+        </form>
+
+
+        <form action = "user" method = "POST" enctype = "multipart/form-data">
+            <input type = "file" name = "file">
+            <input type = "submit"/>
+        </form>
+
+        <h1>已提交数据表历史记录</h1><br/>
+        {% else %}
+        <h1>你需要登录</h1>
+        {% endif %}
+    </center>
+</body>
+</html>

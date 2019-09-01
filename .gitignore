@@ -112,6 +112,7 @@ build/
 dist/
 yamls/
 uploads/
+backups/
 data/
 
 *.db3

@@ -9,52 +9,39 @@
         {% if name %}
         工号: {{id}}  姓名: {{ name }}<br/>
 
+        <br/>
+
         {% for message in get_flashed_messages() %}
             {{ message  }}<br/>
     `   {% endfor %}
 
-        <form method="post" action="user">
-            <!--设置csrf_token-->
-            {{ form.csrf_token() }}
-
-            <p>
-                {{ form.city.label }} {{ form.city }}
-                {% for msg in form.city.errors %}
-                    {{ msg }}
-                {% endfor %}
-            </p>
-
-
-            <p>
-                {{ form.project.label }} {{ form.project }}
-                {% for msg in form.project.errors %}
-                    {{ msg }}
-                {% endfor %}
-            </p>
-
-            <p>
-                {{ form.value.label }} {{ form.value }}
-                {% for msg in form.value.errors %}
-                    {{ msg }}
-                {% endfor %}
-            </p>
-
-
-            <p>
-                {{ form.submit() }}
-            </p>
-        </form>
-
+        <br/>
 
         <form action = "user" method = "POST" enctype = "multipart/form-data">
-            <input type = "file" name = "file">
+            <input id="file" name="file" type="file" accept=".xls,.xlsx" style="width: 220px;" onchange="editType();"/>
             <input type = "submit"/>
         </form>
+
+        <h3>务必按照以下格式上传文件，上传文件会覆盖上一次上传的同一项目与时间的文件</h3>
+        <img src="{{ url_for('static', filename= './images/sample.jpg',_t=val1) }}"  alt="样例" />
 
         <h1>已提交数据表历史记录</h1><br/>
         {% else %}
         <h1>你需要登录</h1>
         {% endif %}
     </center>
+
+<script>
+function editType(){
+    let file=$("#file").val();
+    if(!file){
+       let filename=file.substr(file.lastIndexOf("."));
+         if(filename!='.xls'){
+               alert("请上传xls格式的文件");
+             }
+        }
+}
+</script>
+
 </body>
 </html>

@@ -5,9 +5,10 @@ from flask import Flask, render_template, request, session, redirect, url_for, f
 from werkzeug.utils import secure_filename
 from wtf import Login,KeyGen,UpdateData
 from Config import Config
-import common.log_utils as common
+import common.common as common
 import common.hash_utils as hash_utils
-
+import common.file_utils as file_utils
+from merge_data import excel_check,titles_std
 
 
 UPLOAD_FOLDER = 'uploads'
@@ -133,8 +134,30 @@ def user():
         file = request.files['file']
         filename = file.filename
         common.print_info("上传文件: %s" % filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(filename)))
-        flash("file %s uploaded successfully" % filename)
+        try:
+            # file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(filename)))
+            excel = os.path.join(app.config['UPLOAD_FOLDER'], "%s_%s_%s_%s" % (common.current_time(fmt='%Y%m%d-%H%M%S-%f'), id, name, filename))
+            file.save(excel)
+
+            # 检查
+            ret, info = excel_check(excel, titles_std=titles_std)
+            if ret:
+                project_name, date_power = info
+                flash("%s 上传成功，项目名称：%s，时间力度：%s" % (filename, project_name, date_power))
+
+                # 重命名文件
+                filename_new = "%s_%s_%s_%s" % (date_power, project_name, id, name)
+                excel_new = file_utils.replace_filename(excel, filename_new)
+                file_utils.copy_file(excel, excel_new)
+
+                # 源文件备份
+                excel_backup = os.path.join("backups", os.path.basename(excel))
+                file_utils.move_file(excel, excel_backup)
+            else:
+                flash(info)
+        except Exception as e:
+            flash("ERROR! %s" % e)
+
 
     # return render_template('user.html', form=form_update_data)
     return render_template('user.html', id=id, name=name, form=form_update_data)
