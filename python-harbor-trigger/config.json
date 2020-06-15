@@ -1,0 +1,37 @@
+{
+  "repo_full_name": "myapps/busybox",
+  "operation": {
+      "type": "apply",
+      "json": {
+          "apiVersion": "apps/v1",
+          "kind": "Deployment",
+          "metadata": {
+              "name": "app",
+              "namespace": "default"
+          },
+          "spec": {
+              "selector": {
+                "matchLabels": {
+                  "app": "yes"
+                }
+              },
+              "template": {
+                  "metadata": {
+                      "labels": {
+                         "app": "yes"
+                      }
+                  },
+                  "spec": {
+                      "containers": [
+                          {
+                              "image": "",
+                              "imagePullPolicy": "Always",
+                              "name": "holly"
+                          }
+                      ]
+                  }
+              }
+          }
+      }
+  }
+}
